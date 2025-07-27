@@ -32,10 +32,61 @@ const MUSIC_RECOMMENDATIONS = {
     ]
 };
 
-function handleVoiceInput() {
-    alert("Voice input coming soon! 🎤");
-    }
+//needs happy, sad's emojis, anxious's emojis, and angry edited
+const MOVIE_RECOMMENDATIONS = {
+    happy: [
+        { id: 1, title: "", artist: "Disney", emoji: "🎸", tags: ["upbeat", "cheerful"] },
+        { id: 2, title: "Levitating", artist: "Dua Lipa", emoji: "✨", tags: ["dance", "fun"] },
+        { id: 3, title: "Sunflower", artist: "Post Malone", emoji: "🌻", tags: ["chill", "sunny"] },
+        { id: 4, title: "Happy", artist: "Pharrell Williams", emoji: "😄", tags: ["feel-good", "pop"] }
+    ],
+     sad: [
+        { id: 5, title: "Inside Out", artist: "Disney", emoji: "💔", tags: ["emotional", "somber"] },
+        { id: 6, title: "Mad World", artist: "Gary Jules", emoji: "🌧️", tags: ["melancholic", "indie"] },
+        { id: 7, title: "Hurt", artist: "Johnny Cash", emoji: "🖤", tags: ["deep", "raw"] },
+        { id: 8, title: "Tears in Heaven", artist: "Eric Clapton", emoji: "😢", tags: ["acoustic", "sad"] }
+    ],
+    anxious: [
+        { id: 9, title: "The Secret Life of Walter Mitty", artist: "Ben Stiller", emoji: "🌊", tags: ["ambient", "calming"] },
+        { id: 10, title: "Soul", artist: "Disney", emoji: "🌙", tags: ["classical", "peaceful"] },
+        { id: 11, title: "Life of Pi", artist: "Ang Lee", emoji: "💨", tags: ["meditative", "classic"] },
+        { id: 12, title: "Taare Zameen Par", artist: "Aamir Khan", emoji: "🏞️", tags: ["folk", "gentle"] }
+    ],
+    angry: [
+        { id: 13, title: "Eat Pray Love", artist: "Ryan Murphy", emoji: "💥", tags: ["aggressive", "cathartic"] },
+        { id: 14, title: "Killing in the Name", artist: "Rage Against the Machine", emoji: "🔥", tags: ["rock", "intense"] },
+        { id: 15, title: "Bodies", artist: "Drowning Pool", emoji: "⚡", tags: ["metal", "energetic"] },
+        { id: 16, title: "Chop Suey!", artist: "System of a Down", emoji: "🤘", tags: ["metal", "alternative"] }
+    ]
+};
 
+//needs to be edited
+const BOOKS_RECOMMENDATIONS = {
+    happy: [
+        { id: 1, title: "Good 4 U", artist: "Olivia Rodrigo", emoji: "🎸", tags: ["upbeat", "pop"] },
+        { id: 2, title: "Levitating", artist: "Dua Lipa", emoji: "✨", tags: ["dance", "fun"] },
+        { id: 3, title: "Sunflower", artist: "Post Malone", emoji: "🌻", tags: ["chill", "sunny"] },
+        { id: 4, title: "Happy", artist: "Pharrell Williams", emoji: "😄", tags: ["feel-good", "pop"] }
+    ],
+     sad: [
+        { id: 5, title: "Someone Like You", artist: "Adele", emoji: "💔", tags: ["emotional", "ballad"] },
+        { id: 6, title: "Mad World", artist: "Gary Jules", emoji: "🌧️", tags: ["melancholic", "indie"] },
+        { id: 7, title: "Hurt", artist: "Johnny Cash", emoji: "🖤", tags: ["deep", "raw"] },
+        { id: 8, title: "Tears in Heaven", artist: "Eric Clapton", emoji: "😢", tags: ["acoustic", "sad"] }
+    ],
+    anxious: [
+        { id: 9, title: "Weightless", artist: "Marconi Union", emoji: "🌊", tags: ["ambient", "calming"] },
+        { id: 10, title: "Clair de Lune", artist: "Debussy", emoji: "🌙", tags: ["classical", "peaceful"] },
+        { id: 11, title: "Breathe", artist: "Pink Floyd", emoji: "💨", tags: ["meditative", "classic"] },
+        { id: 12, title: "River", artist: "Joni Mitchell", emoji: "🏞️", tags: ["folk", "gentle"] }
+    ],
+    angry: [
+        { id: 13, title: "Break Stuff", artist: "Limp Bizkit", emoji: "💥", tags: ["aggressive", "cathartic"] },
+        { id: 14, title: "Killing in the Name", artist: "Rage Against the Machine", emoji: "🔥", tags: ["rock", "intense"] },
+        { id: 15, title: "Bodies", artist: "Drowning Pool", emoji: "⚡", tags: ["metal", "energetic"] },
+        { id: 16, title: "Chop Suey!", artist: "System of a Down", emoji: "🤘", tags: ["metal", "alternative"] }
+    ]
+};
 function analyzeMood() {
     const input = document.getElementById('journalInput').value.trim();
     if (!input) {
@@ -65,9 +116,9 @@ function analyzeMood() {
     function detectMoodFromText(text) {
         const normalizedText = text.toLowerCase();
         const moodKeywords = {
-             sad: ['sad', 'depressed', 'down', 'upset', 'hurt', 'lonely', 'empty', 'hopeless'],
-            happy: ['happy', 'excited', 'great', 'amazing', 'wonderful', 'joy', 'love', 'fantastic'],
-            anxious: ['anxious', 'worried', 'stressed', 'nervous', 'overwhelmed', 'panic', 'fear'],
+            sad: ['sad', 'depressed', 'down', 'upset', 'hurt', 'lonely', 'empty', 'hopeless'],
+            happy: ['happy', 'excited', 'great', 'amazing', 'wonderful', 'joy', 'love', 'fantastic','good'],
+            anxious: ['anxious', 'worried', 'stressed', 'nervous', 'overwhelmed', 'panic', 'fear', 'overstimulated'],
             angry: ['angry', 'mad', 'furious', 'irritated', 'annoyed', 'rage', 'frustrated']
         };
             
@@ -90,7 +141,7 @@ function analyzeMood() {
             sad: { mood: 'sad', emoji: '😔', name: 'Melancholic', explanation: 'These songs might help you process those feelings.' },
             angry: { mood: 'angry', emoji: '😠', name: 'Frustrated', explanation: 'Here\'s music to help channel that energy.' },
             anxious: { mood: 'anxious', emoji: '😰', name: 'Anxious', explanation: 'Some calming music to help you find peace.' },
-            happy: { mood: 'happy', emoji: '😊', name: 'Happy', explanation: 'You\'re radiating positive energy today!  \nHere are some media we recommend to keep that smile!' }
+            happy: { mood: 'happy', emoji: '😊', name: 'Happy', explanation: 'You\'re radiating positive energy today!' }
         };
             
         return moodResponses[dominantMood];
