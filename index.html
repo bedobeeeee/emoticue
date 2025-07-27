@@ -32,7 +32,7 @@
   </div>
 
   <!-- Results Page -->
-  <div class="results-container" id="resultsPage">
+  <div class="results-container" id="resultsPage" style="display: none;">
     <button class="back-button" onclick="goBackToHome()">← Back</button>
     
     <div class="mood-summary">
@@ -48,17 +48,15 @@
       <button class="tab-button" onclick="switchTab('books', this)">📚 Books</button>
     </div>
 
-    <!-- Music Section -->
+    <!-- Content Sections -->
     <div class="content-section active" id="music-section">
       <div class="content-grid" id="musicGrid"></div>
     </div>
 
-    <!-- Movies Section -->
     <div class="content-section" id="movies-section">
       <div class="content-grid" id="moviesGrid"></div>
     </div>
 
-    <!-- Books Section -->
     <div class="content-section" id="books-section">
       <div class="content-grid" id="booksGrid"></div>
     </div>
