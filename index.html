@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoticue - Mood Journal & Recommendations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
+            min-height: 100vh;
+            color: #334155;
+        }
+
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.2;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .floating-emoji:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-emoji:nth-child(2) { top: 20%; right: 15%; animation-delay: 2s; }
+        .floating-emoji:nth-child(3) { top: 60%; left: 5%; animation-delay: 4s; }
+        .floating-emoji:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 6s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+
+
+        .homepage-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            margin-bottom: 2.5rem;
+        }
+
+        .input-container {
+            width: 100%;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .journal-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            background: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #334155;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .journal-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .journal-textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        .mic-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            border: none;
+        }
+
+        .mic-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .analyze-button {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .analyze-button:hover {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .analyze-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .results-container {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .results-container:not(.hidden) {
+            display: block;
+        }
+
+        .back-button {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #f8fafc;
+        }
+
+        .mood-summary {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .mood-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .mood-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .mood-explanation {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 12px;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            color: #64748b;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .tab-button:hover {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .content-section {
+            display: none !important;
+        }
+
+        .content-section.active {
+            display: block !important;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+            border-color: #cbd5e1;
+        }
+
+        .card-cover {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .content-card:hover .card-cover {
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            transform: scale(1.02);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+            line-height: 1.3;
+        }
+
+        .card-artist, .card-author, .card-year {
+            color: #64748b;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .card-description {
+            color: #64748b;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        .heart-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #cbd5e1;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .heart-button:hover {
+            transform: scale(1.15);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .heart-button.liked {
+            color: #ef4444;
+            animation: heartPulse 0.6s ease;
+        }
+
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1.15); }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+
+
+        .loading-message {
+            text-align: center;
+            color: #64748b;
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 1.8rem; }
+            .homepage-container, .results-container { padding: 1rem; }
+            .tabs-container { flex-direction: column; gap: 0.5rem; }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-emoji">🌸</div>
+    <div class="floating-emoji">💭</div>
+    <div class="floating-emoji">✨</div>
+    <div class="floating-emoji">🦋</div>
+
+
+
+    <!-- Journal Homepage -->
+    <div class="homepage-container" id="homepage">
+        <h1 class="main-title">How are you feeling today?</h1>
+        <p class="subtitle">Share your thoughts and discover content that matches your mood</p>
+        
+        <div class="input-container">
+            <textarea 
+                class="journal-textarea" 
+                id="journalInput"
+                placeholder="I'm feeling... (describe your emotions or what's on your mind)"
+                maxlength="500"
+            ></textarea>
+            <button class="mic-btn" onclick="handleVoiceInput()">🎤</button>
+        </div>
+        
+        <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">
+            Analyze Mood ✨
+        </button>
+    </div>
+
+    <!-- Results Page -->
+    <div class="results-container hidden" id="resultsPage">
+        <button class="back-button" onclick="goBackToHome()">← Back</button>
+        
+
+        
+        <div class="mood-summary">
+            <div class="mood-emoji" id="moodEmoji">😊</div>
+            <h2 class="mood-name" id="moodName">Happy</h2>
+            <p class="mood-explanation" id="moodExplanation">
+                You're radiating positive energy today!
+            </p>
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-button active" onclick="switchTab('music', this)">🎵 Music</button>
+            <button class="tab-button" onclick="switchTab('movies', this)">🎬 Movies</button>
+            <button class="tab-button" onclick="switchTab('books', this)">📚 Books</button>
+        </div>
+
+        <div class="content-section active" id="music-section">
+            <div class="content-grid" id="musicGrid">
+                <div class="loading-message">Loading music recommendations...</div>
+            </div>
+        </div>
+
+        <div class="content-section" id="movies-section">
+            <div class="content-grid" id="moviesGrid">
+                <div class="loading-message">Loading movie recommendations...</div>
+            </div>
+        </div>
+
+        <div class="content-section" id="books-section">
+            <div class="content-grid" id="booksGrid">
+                <div class="loading-message">Loading book recommendations...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        // App State
+        let currentMood = 'happy';
+        let likedItems = new Set();
+        let isAnalyzing = false;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            document.getElementById('journalInput').focus();
+        });
+
+        function setupEventListeners() {
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') analyzeMood();
+                if (e.key === 'Escape' && !document.getElementById('resultsPage').classList.contains('hidden')) {
+                    goBackToHome();
+                }
+            });
+
+            const journalInput = document.getElementById('journalInput');
+            if (journalInput) {
+                journalInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        analyzeMood();
+                    }
+                });
+            }
+        }
+
+        // Mood Analysis Function
+        async function analyzeEmotionWithGPT(text) {
+            const mockResponse = {
+                emotion: detectMoodFromText(text).mood,
+                confidence: 0.85,
+                explanation: "Based on the language patterns and emotional indicators in your text."
+            };
+            
+            // Simulate processing delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return mockResponse;
+        }
+
+        // Curated Recommendations Database
+        const CURATED_RECOMMENDATIONS = {
+            "happy": {
+                "keywords": ["joy", "cheerful", "grateful", "excited", "sunny", "elated", "hopeful", "amazing", "great", "wonderful", "fantastic", "awesome", "good", "positive"],
+                "songs": [
+                    "Good as Hell - Lizzo",
+                    "Uptown Funk - Mark Ronson ft. Bruno Mars",
+                    "Can't Stop the Feeling! - Justin Timberlake",
+                    "Happy - Pharrell Williams",
+                    "Shake It Off - Taylor Swift",
+                    "Walking on Sunshine - Katrina and the Waves",
+                    "I Gotta Feeling - The Black Eyed Peas"
+                ],
+                "movies": [
+                    "The Pursuit of Happyness",
+                    "Forrest Gump",
+                    "The Shawshank Redemption",
+                    "Good Will Hunting",
+                    "Dead Poets Society",
+                    "It's a Wonderful Life",
+                    "The Princess Bride"
+                ],
+                "books": [
+                    "The Alchemist - Paulo Coelho",
+                    "Big Magic - Elizabeth Gilbert",
+                    "The Power of Positive Thinking - Norman Vincent Peale",
+                    "You Are a Badass - Jen Sincero",
+                    "The Happiness Project - Gretchen Rubin",
+                    "Atomic Habits - James Clear",
+                    "The 7 Habits of Highly Effective People - Stephen Covey"
+                ]
+            },
+            "sad": {
+                "keywords": ["upset", "cry", "depressed", "down", "lonely", "broken", "low", "hurt", "pain", "heartbroken", "devastated", "miserable"],
+                "songs": [
+                    "Someone Like You - Adele",
+                    "Hurt - Johnny Cash",
+                    "Mad World - Gary Jules",
+                    "The Sound of Silence - Simon & Garfunkel",
+                    "Everybody Hurts - R.E.M.",
+                    "Tears in Heaven - Eric Clapton",
+                    "Black - Pearl Jam"
+                ],
+                "movies": [
+                    "Inside Out",
+                    "The Pursuit of Happyness",
+                    "Good Will Hunting",
+                    "A Beautiful Mind",
+                    "The Shawshank Redemption",
+                    "Life is Beautiful",
+                    "Dead Poets Society"
+                ],
+                "books": [
+                    "The Midnight Library - Matt Haig",
+                    "A Man Called Ove - Fredrik Backman",
+                    "The Book Thief - Markus Zusak",
+                    "Where the Crawdads Sing - Delia Owens",
+                    "The Kite Runner - Khaled Hosseini",
+                    "Me Before You - Jojo Moyes",
+                    "The Fault in Our Stars - John Green"
+                ]
+            },
+            "angry": {
+                "keywords": ["rage", "irritated", "furious", "annoyed", "pissed", "mad", "frustrated", "angry", "livid", "outraged", "infuriated"],
+                "songs": [
+                    "Break Stuff - Limp Bizkit",
+                    "Killing in the Name - Rage Against the Machine",
+                    "Bodies - Drowning Pool",
+                    "Chop Suey! - System of a Down",
+                    "B.Y.O.B. - System of a Down",
+                    "Freak on a Leash - Korn",
+                    "Last Resort - Papa Roach"
+                ],
+                "movies": [
+                    "Fight Club",
+                    "The Dark Knight",
+                    "Mad Max: Fury Road",
+                    "Kill Bill",
+                    "John Wick",
+                    "The Matrix",
+                    "Gladiator"
+                ],
+                "books": [
+                    "1984 - George Orwell",
+                    "The Handmaid's Tale - Margaret Atwood",
+                    "Fahrenheit 451 - Ray Bradbury",
+                    "The Hunger Games - Suzanne Collins",
+                    "Fight Club - Chuck Palahniuk",
+                    "American Psycho - Bret Easton Ellis",
+                    "The Girl with the Dragon Tattoo - Stieg Larsson"
+                ]
+            },
+            "anxious": {
+                "keywords": ["anxiety", "nervous", "worried", "panic", "restless", "uneasy", "overthinking", "stressed", "overwhelmed", "tense", "fearful"],
+                "songs": [
+                    "Breathe Me - Sia",
+                    "Heavy - Linkin Park ft. Kiiara",
+                    "Anxiety - Julia Michaels ft. Selena Gomez",
+                    "Stressed Out - Twenty One Pilots",
+                    "Unwell - Matchbox Twenty",
+                    "Mad World - Tears for Fears",
+                    "Hurt - Nine Inch Nails"
+                ],
+                "movies": [
+                    "Inside Out",
+                    "Silver Linings Playbook",
+                    "The Perks of Being a Wallflower",
+                    "A Beautiful Mind",
+                    "Girl, Interrupted",
+                    "It's Kind of a Funny Story",
+                    "The Aviator"
+                ],
+                "books": [
+                    "The Anxiety and Worry Workbook - David A. Clark",
+                    "Dare - Barry McDonagh",
+                    "The Gifts of Imperfection - Brené Brown",
+                    "Feeling Good - David D. Burns",
+                    "The Power of Now - Eckhart Tolle",
+                    "Mindfulness for Beginners - Jon Kabat-Zinn",
+                    "The Subtle Art of Not Giving a F*ck - Mark Manson"
+                ]
+            }
+        };
+
+        async function searchSpotifyTracks(mood, limit = 6) {
+            // Get curated songs for the mood
+            const curatedSongs = CURATED_RECOMMENDATIONS[mood]?.songs || CURATED_RECOMMENDATIONS.happy.songs;
+            const tracks = [];
+            
+            // Shuffle and take the requested number of songs
+            const shuffledSongs = [...curatedSongs].sort(() => 0.5 - Math.random()).slice(0, limit);
+            
+            shuffledSongs.forEach((songString, index) => {
+                const parts = songString.split(' - ');
+                const title = parts[0] || songString;
+                const artist = parts[1] || 'Various Artists';
+                
+                tracks.push({
+                    id: `track-${mood}-${index}`,
+                    name: title,
+                    artists: [{ name: artist }],
+                    album: {
+                        images: []
+                    },
+                    preview_url: null
+                });
+            });
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            return { tracks: { items: tracks } };
+        }
+
+        async function searchTMDBMovies(mood, limit = 6) {
+            // Get curated movies for the mood
+            const curatedMovies = CURATED_RECOMMENDATIONS[mood]?.movies || CURATED_RECOMMENDATIONS.happy.movies;
+            const movies = [];
+            
+            // Shuffle and take the requested number of movies
+            const shuffledMovies = [...curatedMovies].sort(() => 0.5 - Math.random()).slice(0, limit);
+            
+            shuffledMovies.forEach((movieTitle, index) => {
+                // Generate realistic movie data
+                const releaseYear = 2015 + Math.floor(Math.random() * 9); // 2015-2023
+                const rating = 7.0 + Math.random() * 2.5; // 7.0-9.5
+                
+                movies.push({
+                    id: `movie-${mood}-${index}`,
+                    title: movieTitle,
+                    overview: `A carefully selected ${mood} movie that matches your current emotional state. This film is known for its ability to resonate with viewers experiencing similar feelings.`,
+                    poster_path: null,
+                    release_date: `${releaseYear}-06-15`,
+                    vote_average: Math.round(rating * 10) / 10,
+                    genre_ids: [mood]
+                });
+            });
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            return { results: movies };
+        }
+
+        async function searchGoogleBooks(mood, limit = 6) {
+            // Get curated books for the mood
+            const curatedBooks = CURATED_RECOMMENDATIONS[mood]?.books || CURATED_RECOMMENDATIONS.happy.books;
+            const books = [];
+            
+            // Shuffle and take the requested number of books
+            const shuffledBooks = [...curatedBooks].sort(() => 0.5 - Math.random()).slice(0, limit);
+            
+            shuffledBooks.forEach((bookString, index) => {
+                // Parse book title and author if available
+                let title, author;
+                if (bookString.includes(' - ')) {
+                    [title, author] = bookString.split(' - ');
+                } else {
+                    title = bookString;
+                    author = 'Various Authors';
+                }
+                
+                const publishYear = 2010 + Math.floor(Math.random() * 14); // 2010-2023
+                
+                books.push({
+                    id: `book-${mood}-${index}`,
+                    volumeInfo: {
+                        title: title,
+                        authors: [author],
+                        description: `A thoughtfully curated book recommendation for your ${mood} mood. This book has been selected for its ability to provide comfort, insight, and emotional resonance during times like these.`,
+                        imageLinks: {
+                            thumbnail: null
+                        },
+                        publishedDate: publishYear.toString(),
+                        categories: [mood, 'Curated Selection']
+                    }
+                });
+            });
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            return { items: books };
+        }
+
+        // Main Analysis Function
+        async function analyzeMood() {
+            const input = document.getElementById('journalInput').value.trim();
+            if (!input) {
+                alert("Please share how you're feeling first! 💭");
+                return;
+            }
+            if (isAnalyzing) return;
+
+            isAnalyzing = true;
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = 'Analyzing<span class="loading-spinner"></span>';
+
+            try {
+                // Analyze emotion with GPT
+                const emotionResult = await analyzeEmotionWithGPT(input);
+                currentMood = emotionResult.emotion;
+                
+                // Update mood display
+                const moodData = getMoodDisplayData(currentMood);
+                updateMoodDisplay(moodData);
+                
+                // Show results page
+                showResultsPage();
+                
+                // Load all recommendations in parallel
+                await Promise.all([
+                    loadMusicRecommendations(),
+                    loadMovieRecommendations(),
+                    loadBookRecommendations()
+                ]);
+                
+            } catch (error) {
+                console.error('Error analyzing mood:', error);
+                alert('Sorry, there was an error analyzing your mood. Please try again.');
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = 'Analyze Mood ✨';
+                isAnalyzing = false;
+            }
+        }
+
+        function detectMoodFromText(text) {
+            const normalizedText = text.toLowerCase();
+            
+            // Enhanced emotion detection with weighted scoring
+            const emotionPatterns = {
+                happy: {
+                    strong: ["ecstatic", "thrilled", "overjoyed", "elated", "euphoric", "blissful", "fantastic", "amazing", "incredible", "wonderful"],
+                    medium: ["happy", "joy", "joyful", "cheerful", "glad", "pleased", "content", "satisfied", "good", "great", "awesome", "excited", "grateful", "hopeful", "positive", "upbeat", "bright", "sunny"],
+                    phrases: ["feeling great", "so happy", "really good", "best day", "love life", "going well", "feel amazing", "on top of", "cloud nine"]
+                },
+                sad: {
+                    strong: ["devastated", "heartbroken", "crushed", "shattered", "destroyed", "hopeless", "despairing", "miserable", "anguished"],
+                    medium: ["sad", "upset", "down", "low", "blue", "depressed", "gloomy", "melancholy", "sorrowful", "hurt", "pain", "crying", "tears", "lonely", "empty", "broken", "lost"],
+                    phrases: ["feel terrible", "so sad", "can't stop crying", "feel empty", "really down", "feel lost", "breaking apart", "falling apart", "feel awful"]
+                },
+                angry: {
+                    strong: ["furious", "enraged", "livid", "seething", "outraged", "incensed", "irate", "infuriated"],
+                    medium: ["angry", "mad", "pissed", "annoyed", "irritated", "frustrated", "rage", "hate", "disgusted", "fed up", "sick of", "can't stand"],
+                    phrases: ["so angry", "really mad", "pissed off", "fed up with", "can't take", "driving me crazy", "makes me sick", "so frustrated"]
+                },
+                anxious: {
+                    strong: ["panicking", "terrified", "petrified", "overwhelmed", "paralyzed", "consumed by worry"],
+                    medium: ["anxious", "anxiety", "nervous", "worried", "stressed", "tense", "uneasy", "restless", "panic", "fear", "scared", "overthinking", "can't relax", "on edge"],
+                    phrases: ["so stressed", "can't sleep", "overthinking everything", "feel overwhelmed", "panic attack", "can't breathe", "racing thoughts", "so worried"]
+                }
+            };
+
+            const moodScores = { happy: 0, sad: 0, angry: 0, anxious: 0 };
+
+            // Score each emotion based on word matches
+            Object.keys(emotionPatterns).forEach(emotion => {
+                const patterns = emotionPatterns[emotion];
+                
+                // Strong indicators (weight: 3)
+                patterns.strong.forEach(word => {
+                    if (normalizedText.includes(word)) {
+                        moodScores[emotion] += 3;
+                    }
+                });
+                
+                // Medium indicators (weight: 2)
+                patterns.medium.forEach(word => {
+                    if (normalizedText.includes(word)) {
+                        moodScores[emotion] += 2;
+                    }
+                });
+                
+                // Phrase indicators (weight: 4)
+                patterns.phrases.forEach(phrase => {
+                    if (normalizedText.includes(phrase)) {
+                        moodScores[emotion] += 4;
+                    }
+                });
+            });
+
+            // Additional context-based scoring
+            // Negation handling
+            const negationWords = ["not", "don't", "can't", "won't", "isn't", "aren't", "wasn't", "weren't"];
+            const hasNegation = negationWords.some(neg => normalizedText.includes(neg));
+            
+            if (hasNegation) {
+                // If there's negation, reduce positive emotions and potentially increase negative ones
+                if (normalizedText.includes("not happy") || normalizedText.includes("don't feel good")) {
+                    moodScores.happy = Math.max(0, moodScores.happy - 2);
+                    moodScores.sad += 1;
+                }
+                if (normalizedText.includes("can't sleep") || normalizedText.includes("can't relax")) {
+                    moodScores.anxious += 2;
+                }
+            }
+
+            // Intensity modifiers
+            const intensifiers = ["very", "really", "so", "extremely", "incredibly", "absolutely", "totally", "completely"];
+            const hasIntensifier = intensifiers.some(int => normalizedText.includes(int));
+            
+            if (hasIntensifier) {
+                // Boost the highest scoring emotion
+                const highestEmotion = Object.keys(moodScores).reduce((a, b) => 
+                    moodScores[a] > moodScores[b] ? a : b
+                );
+                if (moodScores[highestEmotion] > 0) {
+                    moodScores[highestEmotion] += 1;
+                }
+            }
+
+            // Find the dominant emotion
+            const dominantMood = Object.keys(moodScores).reduce((a, b) => 
+                moodScores[a] > moodScores[b] ? a : b
+            );
+            
+            // If no clear emotion detected, default to happy
+            const finalMood = moodScores[dominantMood] === 0 ? 'happy' : dominantMood;
+            
+            console.log('Emotion scores:', moodScores, 'Selected:', finalMood);
+            return { mood: finalMood, scores: moodScores };
+        }
+
+        function getMoodDisplayData(mood) {
+            const moodResponses = {
+                sad: { emoji: '😔', name: 'Melancholic', explanation: 'These recommendations might help you process those feelings.' },
+                angry: { emoji: '😠', name: 'Frustrated', explanation: 'Here\'s content to help channel that energy positively.' },
+                anxious: { emoji: '😰', name: 'Anxious', explanation: 'Some calming content to help you find peace.' },
+                happy: { emoji: '😊', name: 'Happy', explanation: 'You\'re radiating positive energy today!' }
+            };
+            
+            return moodResponses[mood] || moodResponses.happy;
+        }
+
+        function updateMoodDisplay(moodData) {
+            document.getElementById('moodEmoji').textContent = moodData.emoji;
+            document.getElementById('moodName').textContent = moodData.name;
+            document.getElementById('moodExplanation').textContent = moodData.explanation;
+        }
+
+        // Content Loading Functions
+        async function loadMusicRecommendations() {
+            const musicGrid = document.getElementById('musicGrid');
+            
+            try {
+                const response = await searchSpotifyTracks(currentMood);
+                const tracks = response.tracks.items;
+                
+                musicGrid.innerHTML = '';
+                tracks.forEach((track, index) => {
+                    setTimeout(() => {
+                        musicGrid.appendChild(createMusicCard(track));
+                    }, index * 100);
+                });
+            } catch (error) {
+                musicGrid.innerHTML = '<div class="loading-message">Error loading music recommendations</div>';
+            }
+        }
+
+        async function loadMovieRecommendations() {
+            const moviesGrid = document.getElementById('moviesGrid');
+            
+            try {
+                const response = await searchTMDBMovies(currentMood);
+                const movies = response.results;
+                
+                moviesGrid.innerHTML = '';
+                movies.forEach((movie, index) => {
+                    setTimeout(() => {
+                        moviesGrid.appendChild(createMovieCard(movie));
+                    }, index * 100);
+                });
+            } catch (error) {
+                moviesGrid.innerHTML = '<div class="loading-message">Error loading movie recommendations</div>';
+            }
+        }
+
+        async function loadBookRecommendations() {
+            const booksGrid = document.getElementById('booksGrid');
+            
+            try {
+                const response = await searchGoogleBooks(currentMood);
+                const books = response.items;
+                
+                booksGrid.innerHTML = '';
+                books.forEach((book, index) => {
+                    setTimeout(() => {
+                        booksGrid.appendChild(createBookCard(book));
+                    }, index * 100);
+                });
+            } catch (error) {
+                booksGrid.innerHTML = '<div class="loading-message">Error loading book recommendations</div>';
+            }
+        }
+
+        // Card Creation Functions
+        function createMusicCard(track) {
+            const card = document.createElement('div');
+            card.className = 'content-card fade-in';
+            const isLiked = likedItems.has(track.id);
+            
+            card.innerHTML = `
+                <button class="heart-button ${isLiked ? 'liked' : ''}" onclick="toggleLike('${track.id}', this)">
+                    ${isLiked ? '❤️' : '🤍'}
+                </button>
+                <div class="card-cover">
+                    ${track.album.images.length > 0 && track.album.images[0].url ? 
+                        `<img src="${track.album.images[0].url}" alt="${track.name}">` : 
+                        '🎶'
+                    }
+                </div>
+                <h3 class="card-title">${track.name}</h3>
+                <p class="card-artist">${track.artists[0].name}</p>
+                <div class="tags-container">
+                    <span class="tag">spotify</span>
+                    <span class="tag">${currentMood}</span>
+                </div>
+            `;
+            
+
+            
+            return card;
+        }
+
+        function createMovieCard(movie) {
+            const card = document.createElement('div');
+            card.className = 'content-card fade-in';
+            const isLiked = likedItems.has(movie.id);
+            
+            card.innerHTML = `
+                <button class="heart-button ${isLiked ? 'liked' : ''}" onclick="toggleLike('${movie.id}', this)">
+                    ${isLiked ? '❤️' : '🤍'}
+                </button>
+                <div class="card-cover">
+                    ${movie.poster_path ? 
+                        `<img src="https://image.tmdb.org/t/p/w300${movie.poster_path}" alt="${movie.title}">` : 
+                        '🎬'
+                    }
+                </div>
+                <h3 class="card-title">${movie.title}</h3>
+                <p class="card-year">${new Date(movie.release_date).getFullYear()} • ⭐ ${movie.vote_average.toFixed(1)}</p>
+                <p class="card-description">${movie.overview}</p>
+                <div class="tags-container">
+                    <span class="tag">movie</span>
+                    <span class="tag">${currentMood}</span>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function createBookCard(book) {
+            const card = document.createElement('div');
+            card.className = 'content-card fade-in';
+            const isLiked = likedItems.has(book.id);
+            
+            card.innerHTML = `
+                <button class="heart-button ${isLiked ? 'liked' : ''}" onclick="toggleLike('${book.id}', this)">
+                    ${isLiked ? '❤️' : '🤍'}
+                </button>
+                <div class="card-cover">
+                    ${book.volumeInfo.imageLinks?.thumbnail ? 
+                        `<img src="${book.volumeInfo.imageLinks.thumbnail}" alt="${book.volumeInfo.title}">` : 
+                        '📖'
+                    }
+                </div>
+                <h3 class="card-title">${book.volumeInfo.title}</h3>
+                <p class="card-author">${book.volumeInfo.authors?.[0] || 'Unknown Author'}</p>
+                <p class="card-description">${book.volumeInfo.description || 'No description available.'}</p>
+                <div class="tags-container">
+                    <span class="tag">book</span>
+                    <span class="tag">${currentMood}</span>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function toggleLike(itemId, button) {
+            if (likedItems.has(itemId)) {
+                likedItems.delete(itemId);
+                button.textContent = '🤍';
+                button.classList.remove('liked');
+            } else {
+                likedItems.add(itemId);
+                button.textContent = '❤️';
+                button.classList.add('liked');
+            }
+        }
+
+        // Navigation Functions
+        function switchTab(tabName, buttonElement) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+            
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(tabName + '-section').classList.add('active');
+        }
+
+        function showResultsPage() {
+            document.getElementById('homepage').classList.add('hidden');
+            document.getElementById('resultsPage').classList.remove('hidden');
+        }
+
+        function goBackToHome() {
+            document.getElementById('resultsPage').classList.add('hidden');
+            document.getElementById('homepage').classList.remove('hidden');
+            document.getElementById('journalInput').value = '';
+        }
+
+        function handleVoiceInput() {
+            alert("Voice input coming soon! 🎤");
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965f2003f0af21f2',t:'MTc1MzY1MDY0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
