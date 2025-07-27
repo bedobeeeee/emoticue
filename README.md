@@ -1,7 +1,7 @@
 
 # 🎭 EmotiCue
 
-**EmotiCue** is an AI-powered content discovery platform that understands your mood and recommends movies, books—and soon music—tailored to how you feel. Using OpenAI's GPT for mood detection and APIs like Open Library and TMDb, EmotiCue connects you with the perfect content for your emotional state.
+**EmotiCue** is an AI-powered content discovery platform that understands your mood and recommends movies, books—and music—tailored to how you feel. It uses a personalized journal entry system to analyze your mood and match it with relevant content from a local .json file. This system makes discovering the perfect movie, book, or song even more intuitive and emotional.
 
 ## 💡 Inspiration
 
@@ -13,15 +13,11 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 
 ### 🧠 Mood Recognition
 
-* Uses GPT-based natural language analysis to interpret your current mood from a user prompt.
+* The platform analyzes your journal entry to understand your emotional state and detect mood patterns.
 
 ### 🎬📚 Personalized Recommendations
 
-* Suggests movies via **TMDb** and books via **Open Library** based on your mood.
-
-### 🎵 Music Coming Soon
-
-* Music recommendations and playlist creation powered by Spotify (planned feature).
+* Recommends movies, books, and songs based on the detected mood from the local .json data.
 
 ### ⚡ Lightweight UI
 
@@ -32,11 +28,10 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 ## 🛠️ How It Works
 
 1. **User Input**: You describe how you feel.
-2. **Mood Analysis**: The backend sends your input to GPT (via OpenAI API) to identify emotional tone.
-3. **Recommendation Engine**:
+2. **Mood Analysis**:  The backend analyzes your text to identify emotional tone and patterns
+3. **Recommendation Engine**:Queries a local .json file containing mood-specific movie, book, and music data.
 
-   * Queries **TMDb** for mood-matching movies.
-   * Queries **Open Library** for relevant books.
+   
 4. **Curated Results**: Displays tailored suggestions based on detected mood.
 
 ---
@@ -50,35 +45,38 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 
 **Backend**:
 
-* Node.js + Express for server logic and API routing
-* GPT (OpenAI) for mood detection
-* TMDb API for movie data
-* Open Library API for book data
+* Local .json file for mood-to-content mapping (instead of external APIs)
+* Mood detection logic based on journal entries and pattern recognition
+
 
 ---
 
 ## ⚔️ Challenges We Faced
 
-* Crafting GPT prompts that accurately understand subtle and complex emotions
-* Managing asynchronous calls to multiple APIs efficiently
-* Building a polished frontend with only vanilla tech (no frameworks)
-* Handling API limits and edge-case errors gracefully
+*Analyzing journal entries to accurately detect emotional nuances
+*Mapping mood patterns to relevant content in the .json file
+*Designing a responsive UI with minimal external dependencies
+*Ensuring the system works smoothly with a local data-driven approach (no external API calls)
 
+🏆 Accomplishments
 ---
 
 ## 🏆 Accomplishments
 
-* Seamlessly merged mood analysis with entertainment APIs
-* Developed a fast, elegant frontend without heavy libraries
-* Created a smooth UX using minimal tech stack and smart backend design
+* Developed a system for emotional pattern detection based on user journal entries
+* Created a content recommendation engine using a local .json file
+* Built a lightweight, responsive frontend without relying on heavy frameworks
+
 
 ---
 
 ## 📚 What We Learned
 
-* Leveraging GPT for natural language-based emotion detection
-* UI/UX best practices for responsive and clean design
-* Handling and unifying async responses from diverse third-party APIs
+* How to detect and map moods from user-written content
+* Best practices for building a lightweight UI that remains highly responsive
+* Organizing and structuring mood-to-content data in a .json format for easy access
+
+
 
 ---
 
@@ -96,11 +94,7 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 ### 🔧 Prerequisites
 
 * Node.js & npm
-* API Keys:
-
-  * OpenAI (GPT)
-  * TMDb (The Movie Database)
-  * Open Library (no key required)
+* A text editor or IDE to work with the .json file
 
 ### 📥 Installation
 
@@ -111,13 +105,9 @@ npm install
 ```
 
 ### 🛠️ Configuration
+Set up the .json file:
+Place your recommendations.json file in the data/ folder. This file contains the mood-based content recommendations (movies, books, songs).
 
-Create a `.env` file in the root folder:
-
-```
-OPENAI_API_KEY=your_openai_api_key
-TMDB_API_KEY=your_tmdb_api_key
-```
 
 ### ▶️ Run the App
 
