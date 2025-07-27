@@ -58,7 +58,6 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 *Designing a responsive UI with minimal external dependencies
 *Ensuring the system works smoothly with a local data-driven approach (no external API calls)
 
-🏆 Accomplishments
 ---
 
 ## 🏆 Accomplishments
