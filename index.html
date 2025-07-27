@@ -7,11 +7,93 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">  
     <link href="styles.css" rel="stylesheet">
 </head>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<style>
+.auth-box {
+  width: 300px; /* or whatever size you need */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  /* Centering */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Optional */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+  
+  
+  .auth-box input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  .button-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  button {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+  }
+  
+  .login-btn {
+    background-color: #6366f1;
+  }
+  
+  .signup-btn {
+    background-color: #10b981;
+  }
+  
+  .guest-btn {
+    background-color: #9ca3af;
+    width: 100%;
+  }
+  
+  .logoutBtn {
+    background-color: #a1a2ea;
+    width: 20%;
+    height: 20    px;          /* Set a smaller height */
+    font-size: 13px;       /* Optional: reduce font size for balance */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+</style>
 <body>
     <div class="floating-emoji">🌸</div>
     <div class="floating-emoji">💭</div>
     <div class="floating-emoji">✨</div>
     <div class="floating-emoji">🦋</div>
+
+    <div id="auth-container" class="auth-box">
+        <input type="email" id="authEmail" placeholder="Email" />
+        <input type="password" id="authPassword" placeholder="Password" />
+      
+        <div class="button-row">
+          <button onclick="login()" class="login-btn">Login</button>
+          <button onclick="signup()" class="signup-btn">Sign Up</button>
+        </div>
+      
+        <button onclick="continueAsGuest()" class="guest-btn">Continue as Guest</button>
+      </div>
 
     <div class="homepage-container" id="homepage">
         <h1 class="main-title">How are you feeling today?</h1>

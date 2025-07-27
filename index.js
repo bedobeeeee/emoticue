@@ -12,6 +12,21 @@ fetch('moodrecommendations.json')
   })
   .catch(error => console.error('Error loading JSON:', error));
 
+
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_BUCKET",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+
+
 function displayRecommendations(moodData) {
   const songsContainer = document.getElementById('songs');
   const moviesContainer = document.getElementById('movies');
@@ -277,4 +292,55 @@ function analyzeMood() {
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('journalInput').focus();
 });
+
+
+  function login() {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('homepage').style.display = 'flex';
+      })
+      .catch(error => alert(error.message));
+  }
+
+  function signup() {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('homepage').style.display = 'flex';
+      })
+      .catch(error => alert(error.message));
+  }
+
+  function continueAsGuest() {
+    localStorage.setItem("isGuest", "true");
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('homepage').style.display = 'flex';
+  }
+
+  window.onload = () => {
+    if (localStorage.getItem("isGuest") === "true") {
+      document.getElementById('auth-container').style.display = 'none';
+      document.getElementById('homepage').style.display = 'flex';
+    } else {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          document.getElementById('auth-container').style.display = 'none';
+          document.getElementById('homepage').style.display = 'flex';
+        } else {
+          document.getElementById('auth-container').style.display = 'block';
+          document.getElementById('homepage').style.display = 'none';
+        }
+      });
+    }
+  };
+
+
+
 (function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96571bf5029b5f96',t:'MTc1MzU2NjU5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();
