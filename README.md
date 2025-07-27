@@ -41,7 +41,7 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 **Frontend**:
 
 * HTML + Tailwind CSS for responsive design
-* Vanilla JavaScript for interactivity and API communication
+* Vanilla JavaScript for interactivity
 
 **Backend**:
 
