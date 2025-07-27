@@ -1,44 +1,17 @@
-// Change this to match the detected mood
-const userMood = "happy"; // e.g. "sad", "happy", "angry", etc.
+let recommendations = {};
 
 fetch('moodrecommendations.json')
   .then(response => response.json())
   .then(data => {
-    if (data[userMood]) {
-      displayRecommendations(data[userMood]);
-    } else {
-      console.error("Mood not found in data");
-    }
+    recommendations = data;
+    console.log('Loaded recommendations:', recommendations);
   })
-  .catch(error => console.error('Error loading JSON:', error));
-
-function displayRecommendations(moodData) {
-  const songsContainer = document.getElementById('songs');
-  const moviesContainer = document.getElementById('movies');
-  const booksContainer = document.getElementById('books');
-
-  songsContainer.innerHTML = '';
-  moviesContainer.innerHTML = '';
-  booksContainer.innerHTML = '';
-
-  moodData.songs.forEach(song => {
-    const li = document.createElement('li');
-    li.textContent = song;
-    songsContainer.appendChild(li);
+  .catch(error => {
+    console.error(' Failed to load recommendations:', error);
   });
 
-  moodData.movies.forEach(movie => {
-    const li = document.createElement('li');
-    li.textContent = movie;
-    moviesContainer.appendChild(li);
-  });
-
-  moodData.books.forEach(book => {
-    const li = document.createElement('li');
-    li.textContent = book;
-    booksContainer.appendChild(li);
-  });
-}
+let currentMood = 'happy';
+let likedSongs = new Set();
 
 //TODO: link to song/media recommended
 
