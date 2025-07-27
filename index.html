@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emoticue - Mood Journal & Recommendations</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -302,6 +303,81 @@
             .tabs-container { flex-direction: column; gap: 0.5rem; }
             .content-grid { grid-template-columns: 1fr; }
         }
+        /* Reset & Base Styles */
+        body {
+  margin: 0;
+  padding: 0;
+  background: #f0f4f8;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-box {
+  width: 400px;    /* increased from 340px */
+  padding: 40px;   /* increased from 30px */
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;       /* a bit more space between items */
+}
+
+
+.auth-box input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+}
+
+.login-btn {
+  background-color: #6366f1;
+}
+
+.signup-btn {
+  background-color: #10b981;
+}
+
+.guest-btn {
+  background-color: #9ca3af;
+  width: 100%;
+}
+
+.logoutBtn {
+  background-color: #a1a2ea;
+  width: 20%;
+  height: 20    px;          /* Set a smaller height */
+  font-size: 13px;       /* Optional: reduce font size for balance */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+
     </style>
 </head>
 <body>
@@ -310,6 +386,19 @@
     <div class="floating-emoji">✨</div>
     <div class="floating-emoji">🦋</div>
 
+    <div id="auth-container" class="auth-box">
+        <input type="email" id="authEmail" placeholder="Email" />
+        <input type="password" id="authPassword" placeholder="Password" />
+      
+        <div class="button-row">
+          <button onclick="login()" class="login-btn">Login</button>
+          <button onclick="signup()" class="signup-btn">Sign Up</button>
+        </div>
+      
+        <button onclick="continueAsGuest()" class="guest-btn">Continue as Guest</button>
+      </div>
+      
+      
     <div class="homepage-container" id="homepage">
         <h1 class="main-title">How are you feeling today?</h1>
         <p class="subtitle">Share your thoughts and discover content that matches your mood</p>
@@ -327,6 +416,8 @@
         <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">
             Analyze Mood ✨
         </button>
+        <button class="logoutBtn" onclick="logout()">Logout</button>
+
     </div>
 
     <div class="results-container" id="resultsPage">
@@ -367,7 +458,24 @@
         </div>
     </div>
 
+    <!-- Firebase App (core SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+
     <script>
+        const firebaseConfig = {
+        apiKey: "AIzaSyCcHYyZVlPsnLzObPsl7zNlAAzMajVsk2k",
+        authDomain: "emoticue-50500.firebaseapp.com",
+        projectId: "emoticue-50500",
+        storageBucket: "emoticue-50500.firebasestorage.app",
+        messagingSenderId: "456390975899",
+        appId: "1:456390975899:web:dd13932774fc8e595b813e"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+
         let currentMood = 'happy';
         let likedSongs = new Set();
         let isAnalyzing = false;
@@ -548,7 +656,63 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('journalInput').focus();
         });
+
+  function login() {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('homepage').style.display = 'flex';
+      })
+      .catch(error => alert(error.message));
+  }
+
+  function signup() {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('homepage').style.display = 'flex';
+      })
+      .catch(error => alert(error.message));
+  }
+
+  function continueAsGuest() {
+    localStorage.setItem("isGuest", "true");
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('homepage').style.display = 'flex';
+  }
+
+  window.onload = () => {
+    if (localStorage.getItem("isGuest") === "true") {
+      document.getElementById('auth-container').style.display = 'none';
+      document.getElementById('homepage').style.display = 'flex';
+    } else {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          document.getElementById('auth-container').style.display = 'none';
+          document.getElementById('homepage').style.display = 'flex';
+        } else {
+          document.getElementById('auth-container').style.display = 'block';
+          document.getElementById('homepage').style.display = 'none';
+        }
+      });
+    }
+  };
+
+  function logout() {
+  firebase.auth().signOut().then(() => {
+    localStorage.removeItem("guest"); // Also remove guest mode
+    location.reload(); // Or redirect to homepage
+  }).catch((error) => {
+    alert("Error logging out: " + error.message);
+  });
+}
+
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96571bf5029b5f96',t:'MTc1MzU2NjU5MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-// TODO: Connect this to backend later the apis and all this is just the demo ver i took the premade song list from gpt
