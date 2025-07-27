@@ -3,39 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Emoticue - Mood Journal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <title>Emoticue - Mood Journal & Recommendations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" />
 </head>
 <body>
-  <div class="homepage-container">
-    <h1 class="main-title">How are you feeling today?</h1>
-    <p class="subtitle">Write about your day and get personalized recommendations.</p>
+  <!-- Floating Emojis -->
+  <div class="floating-emoji">🌸</div>
+  <div class="floating-emoji">💭</div>
+  <div class="floating-emoji">✨</div>
+  <div class="floating-emoji">🦋</div>
 
+  <!-- Homepage -->
+  <div class="homepage-container" id="homepage">
+    <h1 class="main-title">How are you feeling today?</h1>
+    <p class="subtitle">Share your thoughts and discover content that matches your mood</p>
+    
     <div class="input-container">
-      <textarea class="journal-textarea" id="journalInput" placeholder="Start typing..."></textarea>
-      <button class="mic-btn" onclick="startRecording()">🎤</button>
+      <textarea 
+        class="journal-textarea" 
+        id="journalInput"
+        placeholder="I'm feeling... (describe your emotions or what's on your mind)"
+        maxlength="500"
+      ></textarea>
     </div>
-    <button class="analyze-button" onclick="analyzeMood()">Analyze</button>
+    
+    <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">Analyze Mood ✨</button>
   </div>
 
-  <div class="results-container" id="results">
-    <button class="back-button" onclick="goBack()">← Back</button>
-
+  <!-- Results Page -->
+  <div class="results-container" id="resultsPage" style="display: none;">
+    <button class="back-button" onclick="goBackToHome()">← Back</button>
+    
     <div class="mood-summary">
       <div class="mood-emoji" id="moodEmoji">😊</div>
-      <div class="mood-name" id="moodName">Happy</div>
-      <div class="mood-explanation" id="moodExplanation">
-        You seem cheerful! Here are some personalized recommendations.
-      </div>
+      <h2 class="mood-name" id="moodName">Happy</h2>
+      <p class="mood-explanation" id="moodExplanation">You're radiating positive energy today!</p>
     </div>
 
+    <!-- Tabs -->
     <div class="tabs-container">
-      <button class="tab-button active" onclick="showTab('music')">Music</button>
-      <button class="tab-button" onclick="showTab('movies')">Movies</button>
-      <button class="tab-button" onclick="showTab('books')">Books</button>
+      <button class="tab-button active" onclick="switchTab('music', this)">🎵 Music</button>
+      <button class="tab-button" onclick="switchTab('movies', this)">🎬 Movies</button>
+      <button class="tab-button" onclick="switchTab('books', this)">📚 Books</button>
     </div>
 
+    <!-- Content Sections -->
     <div class="content-section active" id="music-section">
       <div class="content-grid" id="musicGrid"></div>
     </div>
@@ -49,7 +62,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>
-
