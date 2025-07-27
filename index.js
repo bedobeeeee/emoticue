@@ -1,116 +1,83 @@
-let currentMood = 'happy';
-let isAnalyzing = false;
-
-const recommendations = {
-  happy: {
+const moodData = {
+  Happy: {
     emoji: "😊",
-    explanation: "You're radiating positive energy today!",
-    music: ["Happy - Pharrell Williams", "Walking on Sunshine - Katrina & The Waves"],
-    movies: ["The Pursuit of Happyness", "Paddington"],
-    books: ["The Alchemist", "Eat Pray Love"]
+    explanation: "You seem cheerful! Here are some personalized recommendations.",
+    music: [
+      { title: "Walking on Sunshine", artist: "Katrina & The Waves", tags: ["Feel-good", "Upbeat"] },
+      { title: "Good as Hell", artist: "Lizzo", tags: ["Confident", "Pop"] }
+    ],
+    movies: [
+      { title: "Paddington 2", tags: ["Wholesome", "Family"], emoji: "🧸" },
+      { title: "The Grand Budapest Hotel", tags: ["Wes Anderson", "Comedy"], emoji: "🏨" }
+    ],
+    books: [
+      { title: "The Little Prince", tags: ["Classic", "Philosophical"], emoji: "🦊" },
+      { title: "Eleanor & Park", tags: ["Romance", "Young Adult"], emoji: "🎧" }
+    ]
   },
-  sad: {
-    emoji: "😢",
-    explanation: "It's okay to feel down sometimes. Let yourself rest.",
-    music: ["Fix You - Coldplay", "Someone Like You - Adele"],
-    movies: ["Inside Out", "A Silent Voice"],
-    books: ["Norwegian Wood", "The Bell Jar"]
-  },
-  anxious: {
-    emoji: "😰",
-    explanation: "Take a deep breath. You're doing your best, and that's enough.",
-    music: ["Weightless - Marconi Union", "Ocean Eyes - Billie Eilish"],
-    movies: ["A Beautiful Mind", "The Perks of Being a Wallflower"],
-    books: ["Reasons to Stay Alive", "Anxiety Relief Workbook"]
-  },
-  angry: {
-    emoji: "😠",
-    explanation: "Channel that energy into something powerful and positive.",
-    music: ["Smells Like Teen Spirit - Nirvana", "Break Stuff - Limp Bizkit"],
-    movies: ["John Wick", "Whiplash"],
-    books: ["The Art of War", "Unfu*k Yourself"]
-  }
+  // Add other moods if needed
 };
 
 function analyzeMood() {
-  const input = document.getElementById('journalInput').value.trim();
-  if (!input) {
-    alert("Please share how you're feeling first! 💭");
-    return;
-  }
-  if (isAnalyzing) return;
+  const input = document.getElementById("journalInput").value.toLowerCase();
+  let mood = "Happy"; // For now, we hardcode it or use keyword detection
 
-  isAnalyzing = true;
-  const analyzeBtn = document.getElementById('analyzeBtn');
-  analyzeBtn.disabled = true;
-  analyzeBtn.textContent = 'Analyzing...';
+  // You can expand this later with sentiment analysis
+  const moodInfo = moodData[mood];
 
-  setTimeout(() => {
-    const moodResult = detectMoodFromText(input);
-    currentMood = moodResult.mood;
-    updateMoodDisplay(moodResult);
-    loadContentRecommendations();
-    showResultsPage();
+  document.getElementById("moodEmoji").textContent = moodInfo.emoji;
+  document.getElementById("moodName").textContent = mood;
+  document.getElementById("moodExplanation").textContent = moodInfo.explanation;
 
-    analyzeBtn.disabled = false;
-    analyzeBtn.textContent = 'Analyze Mood ✨';
-    isAnalyzing = false;
-  }, 1000);
+  displayRecommendations("music", moodInfo.music);
+  displayRecommendations("movies", moodInfo.movies);
+  displayRecommendations("books", moodInfo.books);
+
+  document.querySelector(".homepage-container").style.display = "none";
+  document.getElementById("results").style.display = "block";
 }
 
-function detectMoodFromText(text) {
-  const lower = text.toLowerCase();
-  if (lower.includes('happy') || lower.includes('excited') || lower.includes('joy')) {
-    return { mood: 'happy' };
-  } else if (lower.includes('sad') || lower.includes('depressed') || lower.includes('down')) {
-    return { mood: 'sad' };
-  } else if (lower.includes('anxious') || lower.includes('nervous') || lower.includes('worried')) {
-    return { mood: 'anxious' };
-  } else if (lower.includes('angry') || lower.includes('mad') || lower.includes('furious')) {
-    return { mood: 'angry' };
-  } else {
-    return { mood: 'happy' }; // default fallback
-  }
+function displayRecommendations(type, items) {
+  const grid = document.getElementById(`${type}Grid`);
+  grid.innerHTML = items.map(item => createCard(item, type)).join("");
 }
 
-function updateMoodDisplay({ mood }) {
-  const moodInfo = recommendations[mood];
-  document.getElementById('moodEmoji').textContent = moodInfo.emoji;
-  document.getElementById('moodName').textContent = mood.charAt(0).toUpperCase() + mood.slice(1);
-  document.getElementById('moodExplanation').textContent = moodInfo.explanation;
+function createCard(item, type) {
+  const emoji = item.emoji || getDefaultEmoji(type);
+  return `
+    <div class="music-card">
+      <div class="card-cover">${emoji}</div>
+      <div class="card-title">${item.title}</div>
+      ${item.artist ? `<div class="card-artist">${item.artist}</div>` : ""}
+      <div class="tags-container">
+        ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+      </div>
+    </div>
+  `;
 }
 
-function loadContentRecommendations() {
-  const moodInfo = recommendations[currentMood];
-
-  const musicGrid = document.getElementById('musicGrid');
-  const moviesGrid = document.getElementById('moviesGrid');
-  const booksGrid = document.getElementById('booksGrid');
-
-  musicGrid.innerHTML = moodInfo.music.map(song => `<div class="content-card">${song}</div>`).join('');
-  moviesGrid.innerHTML = moodInfo.movies.map(movie => `<div class="content-card">${movie}</div>`).join('');
-  booksGrid.innerHTML = moodInfo.books.map(book => `<div class="content-card">${book}</div>`).join('');
+function getDefaultEmoji(type) {
+  return {
+    music: "🎵",
+    movies: "🎬",
+    books: "📚"
+  }[type] || "📄";
 }
 
-function showResultsPage() {
-  document.getElementById('homepage').style.display = 'none';
-  document.getElementById('resultsPage').style.display = 'block';
+function goBack() {
+  document.getElementById("results").style.display = "none";
+  document.querySelector(".homepage-container").style.display = "flex";
 }
 
-function goBackToHome() {
-  document.getElementById('homepage').style.display = 'block';
-  document.getElementById('resultsPage').style.display = 'none';
-  document.getElementById('journalInput').value = '';
+function showTab(type) {
+  document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".content-section").forEach(sec => sec.classList.remove("active"));
+
+  document.querySelector(`[onclick="showTab('${type}')"]`).classList.add("active");
+  document.getElementById(`${type}-section`).classList.add("active");
 }
 
-function switchTab(tabName, btnElement) {
-  const sections = ['music', 'movies', 'books'];
-  sections.forEach(section => {
-    document.getElementById(`${section}-section`).classList.remove('active');
-  });
-  document.getElementById(`${tabName}-section`).classList.add('active');
-
-  const allBtns = document.querySelectorAll('.tab-button');
-  allBtns.forEach(btn => btn.classList.remove('active'));
-  btnElement.classList.add('active');
+// Dummy voice input starter
+function startRecording() {
+  alert("🎤 Voice input coming soon!");
 }
