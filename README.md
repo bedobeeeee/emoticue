@@ -55,13 +55,13 @@ Data Source: Local(Hardcoded file)
 ##  Accomplishments
 
 * Developed a system for emotional pattern detection based on user journal entries
-* Created a content recommendation engine using a local .json file
+* Created a content recommendation engine using a hardcoded file
 * Built a lightweight, responsive frontend without relying on heavy frameworks
 
 
 ---
 
-##  What We Learned
+##  What We Learnt
 
 * How to detect and map moods from user-written content
 * Best practices for building a lightweight UI that remains highly responsive
