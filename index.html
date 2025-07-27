@@ -1,79 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoticue - Mood Journal & Recommendations</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">  
-    <link href="styles.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emoticue - Mood Journal & Recommendations</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="floating-emoji">🌸</div>
-    <div class="floating-emoji">💭</div>
-    <div class="floating-emoji">✨</div>
-    <div class="floating-emoji">🦋</div>
+  <!-- Floating Emojis -->
+  <div class="floating-emoji">🌸</div>
+  <div class="floating-emoji">💭</div>
+  <div class="floating-emoji">✨</div>
+  <div class="floating-emoji">🦋</div>
 
-    <div class="homepage-container" id="homepage">
-        <h1 class="main-title">How are you feeling today?</h1>
-        <p class="subtitle">Share your thoughts and discover content that matches your mood</p>
-        
-        <div class="input-container">
-            <textarea 
-                class="journal-textarea" 
-                id="journalInput"
-                placeholder="I'm feeling... (describe your emotions or what's on your mind)"
-                maxlength="500"
-            ></textarea>
-            
-        </div>
-        
-        <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">
-            Analyze Mood ✨
-        </button>
+  <!-- Homepage -->
+  <div class="homepage-container" id="homepage">
+    <h1 class="main-title">How are you feeling today?</h1>
+    <p class="subtitle">Share your thoughts and discover content that matches your mood</p>
+    
+    <div class="input-container">
+      <textarea 
+        class="journal-textarea" 
+        id="journalInput"
+        placeholder="I'm feeling... (describe your emotions or what's on your mind)"
+        maxlength="500"
+      ></textarea>
+    </div>
+    
+    <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">Analyze Mood ✨</button>
+  </div>
+
+  <!-- Results Page -->
+  <div class="results-container" id="resultsPage">
+    <button class="back-button" onclick="goBackToHome()">← Back</button>
+    
+    <div class="mood-summary">
+      <div class="mood-emoji" id="moodEmoji">😊</div>
+      <h2 class="mood-name" id="moodName">Happy</h2>
+      <p class="mood-explanation" id="moodExplanation">You're radiating positive energy today!</p>
     </div>
 
-    <div class="results-container" id="resultsPage">
-        <button class="back-button" onclick="goBackToHome()">← Back</button>
-        
-        <div class="mood-summary">
-            <div class="mood-emoji" id="moodEmoji">😊</div>
-            <h2 class="mood-name" id="moodName">Happy</h2>
-            <p class="mood-explanation" id="moodExplanation">
-                You're radiating positive energy today!
-               
-            </p>
-        </div>
+    <!-- Tabs -->
+    <div class="tabs-container">
+      <button class="tab-button active" onclick="switchTab('music', this)">🎵 Music</button>
+      <button class="tab-button" onclick="switchTab('movies', this)">🎬 Movies</button>
+      <button class="tab-button" onclick="switchTab('books', this)">📚 Books</button>
+    </div>
 
-        <div class="tabs-container">
-            <button class="tab-button active" onclick="switchTab('music', this)">🎵 Music</button>
-            <button class="tab-button" onclick="switchTab('movies', this)">🎬 Movies</button>
-            <button class="tab-button" onclick="switchTab('books', this)">📚 Books</button>
-            
-        </div>
-
+    <!-- Music Section -->
     <div class="content-section active" id="music-section">
-            <div class="content-grid" id="musicGrid"></div>
-        </div>
-
-        <div class="content-section" id="movies-section">
-            <div class="content-grid">
-                <p style="text-align: center; color: #64748b; padding: 2rem;">
-                    Movies section coming soon! 🎬
-                </p>
-            </div>
-        </div>
-
-        <div class="content-section" id="books-section">
-            <div class="content-grid">
-                <p style="text-align: center; color: #64748b; padding: 2rem;">
-                    Books section coming soon! 📚
-                </p>
-            </div>
-        </div>
-        
+      <div class="content-grid" id="musicGrid"></div>
     </div>
-<script src="index.js"></script>
 
+    <!-- Movies Section -->
+    <div class="content-section" id="movies-section">
+      <div class="content-grid" id="moviesGrid"></div>
+    </div>
+
+    <!-- Books Section -->
+    <div class="content-section" id="books-section">
+      <div class="content-grid" id="booksGrid"></div>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
 </body>
 </html>
-<!-- TODO: Connect this to backend later the apis and all this is just the demo ver i took the premade song list from gpt -->
