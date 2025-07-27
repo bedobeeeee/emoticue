@@ -9,7 +9,7 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 
 ---
 
-## 🚀 Features
+## Features
 
 ###  Mood Recognition
 
@@ -29,7 +29,7 @@ We all struggle to pick the right movie, book, or song that truly fits our mood.
 
 1. **User Input**: You describe how you feel.
 2. **Mood Analysis**:  The backend analyzes your text to identify emotional tone and patterns
-3. **Recommendation Engine**:The harcoded loacal file containing mood-specific movie, book, and music data.
+3. **Recommendation Engine**:The harcoded local file containing mood-specific movie, book, and music data.
 
    
 4. **Curated Results**: Displays tailored suggestions based on detected mood.
@@ -65,7 +65,6 @@ Data Source: Local(Hardcoded file)
 
 * How to detect and map moods from user-written content
 * Best practices for building a lightweight UI that remains highly responsive
-* Organizing and structuring mood-to-content data in a .json format for easy access
 
 
 
