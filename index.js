@@ -101,7 +101,7 @@ function analyzeMood() {
         moodEmojiMascot.innerHTML= `<img src='images/${moodData.mood}.png' class='mood-images'>`;
 
 
-        //document.getElementById('moodEmoji').textContent = moodData.emoji;
+        
         document.getElementById('moodName').textContent = moodData.name;
         document.getElementById('moodExplanation').textContent = moodData.explanation;
      }
