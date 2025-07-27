@@ -1,3 +1,14 @@
+let recommendations = {};
+
+fetch('recommendations.json')
+  .then(response => response.json())
+  .then(data => {
+    recommendations = data;
+    console.log('Loaded recommendations:', recommendations);
+  })
+  .catch(error => {
+    console.error(' Failed to load recommendations:', error);
+  });
 
 let currentMood = 'happy';
 let likedSongs = new Set();
