@@ -40,10 +40,6 @@ function displayRecommendations(moodData) {
   });
 }
 
-let currentMood = 'happy';
-let likedSongs = new Set();
-let isAnalyzing = false;
-
 //TODO: link to song/media recommended
 
 const MUSIC_RECOMMENDATIONS = {
