@@ -564,7 +564,14 @@ const firebaseConfig = {
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  
+  // Set session persistence so user is logged out when browser closes
+auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
+  .then(() => {
+    console.log("Session persistence set to SESSION");
+  })
+  .catch(error => {
+    console.error("Error setting persistence:", error);
+  });
 
         // App State
         let currentMood = 'happy';
