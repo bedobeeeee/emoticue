@@ -462,12 +462,27 @@
   .logoutBtn {
     background-color: #a1a2ea;
     width: 20%;
-    height: 20    px;          /* Set a smaller height */
-    font-size: 13px;       /* Optional: reduce font size for balance */
+    height: 20    px;          
+    font-size: 13px;       
     border: none;
     border-radius: 6px;
     cursor: pointer;
   }
+
+  #logoutBtn {
+    display: none; /* hidden until login */
+  background-color: #ff6b6b;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#logoutBtn:hover {
+  background-color: #ff4c4c;
+}
+
 </style>
    
 </head>
@@ -509,6 +524,8 @@
         <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">
             Analyze Mood ✨
         </button>
+        <button id="logoutBtn" onclick="logout()">Logout</button>
+
     </div>
 
     <!-- Results Page -->
@@ -549,6 +566,8 @@
             </div>
         </div>
     </div>
+    <button id="logoutBtn" onclick="logout()">Logout</button>
+
 
     <script>
 
@@ -1168,34 +1187,38 @@ auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
         }
 
         function login() {
-    const email = document.getElementById('authEmail').value;
-    const password = document.getElementById('authPassword').value;
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
 
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        document.getElementById('auth-container').style.display = 'none';
-        document.getElementById('homepage').style.display = 'flex';
-      })
-      .catch(error => alert(error.message));
-  }
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById('auth-container').style.display = 'none';
+      document.getElementById('homepage').style.display = 'flex';
+      document.getElementById('logoutBtn').style.display = 'inline-block';
+    })
+    .catch(error => alert(error.message));
+}
 
-  function signup() {
-    const email = document.getElementById('authEmail').value;
-    const password = document.getElementById('authPassword').value;
+function signup() {
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
 
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        document.getElementById('auth-container').style.display = 'none';
-        document.getElementById('homepage').style.display = 'flex';
-      })
-      .catch(error => alert(error.message));
-  }
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      document.getElementById('auth-container').style.display = 'none';
+      document.getElementById('homepage').style.display = 'flex';
+      document.getElementById('logoutBtn').style.display = 'inline-block';
+    })
+    .catch(error => alert(error.message));
+}
 
-  function continueAsGuest() {
-    localStorage.setItem("isGuest", "true");
-    document.getElementById('auth-container').style.display = 'none';
-    document.getElementById('homepage').style.display = 'flex';
-  }
+function continueAsGuest() {
+  localStorage.setItem("isGuest", "true");
+  document.getElementById('auth-container').style.display = 'none';
+  document.getElementById('homepage').style.display = 'flex';
+  document.getElementById('logoutBtn').style.display = 'inline-block';
+}
+
 
   window.onload = () => {
     if (localStorage.getItem("isGuest") === "true") {
@@ -1213,6 +1236,19 @@ auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
       });
     }
   };
+
+  function logout() {
+  auth.signOut().then(() => {
+    localStorage.removeItem("isGuest");
+    document.getElementById('auth-container').style.display = 'block';
+    document.getElementById('homepage').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'none';
+  }).catch(error => {
+    console.error("Error signing out:", error);
+  });
+}
+
+
 
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'965f2003f0af21f2',t:'MTc1MzY1MDY0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
