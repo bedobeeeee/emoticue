@@ -483,6 +483,51 @@
   background-color: #ff4c4c;
 }
 
+/* Button container */
+.button-group {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  align-items: center;
+  gap: 12px; /* spacing between buttons */
+  margin-top: 20px;
+}
+
+/* Common button style */
+button {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+/* Analyze Mood button */
+.analyze-button {
+  background: linear-gradient(90deg, #4f8ef7, #2563eb);
+  color: white;
+  width: 220px;
+}
+
+.analyze-button:hover {
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  transform: translateY(-2px);
+}
+
+/* Logout button */
+.logoutBtn {
+  background-color: #ef4444;
+  color: white;
+  width: 150px;
+}
+
+.logoutBtn:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}
+
+
 </style>
    
 </head>
@@ -521,10 +566,11 @@
             <button class="mic-btn" onclick="handleVoiceInput()">🎤</button>
         </div>
         
-        <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">
-            Analyze Mood ✨
-        </button>
-        <button id="logoutBtn" onclick="logout()">Logout</button>
+        <div class="button-group">
+            <button class="analyze-button" onclick="analyzeMood()">Analyze Mood ✨</button>
+            <button class="logoutBtn" onclick="logout()">Logout</button>
+          </div>
+          
 
     </div>
 
