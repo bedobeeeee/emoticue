@@ -405,39 +405,30 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <style>
     .auth-box {
-        width: 320px;
-        padding: 28px 24px;
-        background: white; /* White looks cleaner for a form */
-        border: none; /* Remove border for a softer look */
-        border-radius: 16px; /* Softer corners */
-        
-        /* Centering */
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+      width: 300px; /* or whatever size you need */
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    
+      /* Centering */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    
+      /* Optional */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
       
-        /* Shadow for depth */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-      
-        display: flex;
-        flex-direction: column;
-        gap: 14px; /* Space between elements */
-      }
       
       .auth-box input {
         width: 100%;
         padding: 12px;
-        border: 1px solid #d1d5db;
+        border: 1px solid #ccc;
         border-radius: 8px;
         font-size: 14px;
-        outline: none;
-        transition: all 0.2s ease-in-out;
-      }
-      
-      .auth-box input:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
       }
       
       .button-row {
@@ -445,51 +436,29 @@
         gap: 10px;
         width: 100%;
       }
-      
       button {
-        padding: 12px;
-        border: none;
-        border-radius: 8px;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        flex: 1;
-        transition: transform 0.15s ease, opacity 0.15s ease;
-      }
-      
-      button:hover {
-        transform: translateY(-2px);
-        opacity: 0.95;
-      }
-      
-      .login-btn {
-        background-color: #6366f1;
-      }
-      
-      .signup-btn {
-        background-color: #10b981;
-      }
-      
-      .guest-btn {
-        background-color: #6b7280;
-        width: 100%;
-      }
-           
-
-  #logoutBtn {
-    display: none; /* hidden until login */
-  background-color: #ff6b6b;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#logoutBtn:hover {
-  background-color: #ff4c4c;
-}
-
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+  }
+  
+  .login-btn {
+    background-color: #6366f1;
+  }
+  
+  .signup-btn {
+    background-color: #10b981;
+  }
+  
+  .guest-btn {
+    background-color: #9ca3af;
+    width: 100%;
+  }
+  
 /* Button container */
 .button-group {
   display: flex;
@@ -574,7 +543,7 @@ button {
         </div>
         
         <div class="button-group">
-            <button class="analyze-button" onclick="analyzeMood()">Analyze Mood ✨</button>
+            <button class="analyze-button" id="analyzeBtn" onclick="analyzeMood()">Analyze Mood ✨</button>
             <button class="logoutBtn" onclick="logout()">Logout</button>
           </div>
           
